@@ -23,7 +23,7 @@ const save = async (req, res) => {
         dev = await Dev.create({
             name, github_username, avatar_url, bio, techs: techsArray, geolocation
         });
-
+        res.setHeader("Access-Control-Allow-Origin", "*");
         return res.json(dev);
     } catch (error) {
         return res.send(error.message);
