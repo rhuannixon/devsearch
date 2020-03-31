@@ -14,7 +14,7 @@ const save = async (req, res) => {
         const resp = await axios.get(`https://api.github.com/users/${github_username}`);
 
         const { avatar_url, bio, name = login } = resp.data;
-        const techsArray = techs.split(',').map(tech => tech.trim());
+        const techsArray = stringToArray(techs);
         const geolocation = {
             type: 'Point',
             coordinates: [longitude, latitude]
@@ -53,7 +53,7 @@ const search = async (req, res) => {
                 $in: techsArray,
             },
             geolocation: {
-                $near: {
+                $nearSphere: {
                     $geometry: {
                         type: 'Point',
                         coordinates: [longitude, latitude],
@@ -70,7 +70,7 @@ const search = async (req, res) => {
     }
 }
 
-const stringToArray = str => str.split(',').map(item => item.trim());
+const stringToArray = str => str.split(',').map(item => item.trim().toLowerCase());
 
 module.exports = {
     save, list, search
